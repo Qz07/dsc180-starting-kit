@@ -1,0 +1,71 @@
+nohup: ignoring input
+Running RMU with different k values
+-----------------------------------
+k=0.25
+Running on device: CUDA
+Files already downloaded and verified
+Files already downloaded and verified
+Running RMU method
+  0%|          | 0/5 [00:00<?, ?it/s] 20%|██        | 1/5 [00:01<00:06,  1.66s/it] 40%|████      | 2/5 [00:02<00:04,  1.40s/it] 60%|██████    | 3/5 [00:04<00:02,  1.40s/it] 80%|████████  | 4/5 [00:05<00:01,  1.32s/it]100%|██████████| 5/5 [00:06<00:00,  1.32s/it]100%|██████████| 5/5 [00:06<00:00,  1.36s/it]
+--- RMU Training Complete ---
+Results after unlearning: through the method rmu
+Test Accuracy: 0.8782
+Truth Ratio: 0.9789
+Membership Inference Attack Accuracy: 0.5767
+-----------------------------------
+k=0.5
+Running on device: CUDA
+Files already downloaded and verified
+Files already downloaded and verified
+Running RMU method
+  0%|          | 0/5 [00:00<?, ?it/s] 20%|██        | 1/5 [00:01<00:06,  1.64s/it] 40%|████      | 2/5 [00:03<00:05,  1.73s/it] 60%|██████    | 3/5 [00:04<00:03,  1.57s/it] 80%|████████  | 4/5 [00:06<00:01,  1.48s/it]100%|██████████| 5/5 [00:07<00:00,  1.44s/it]100%|██████████| 5/5 [00:07<00:00,  1.51s/it]
+--- RMU Training Complete ---
+Results after unlearning: through the method rmu
+Test Accuracy: 0.8822
+Truth Ratio: 0.9865
+Membership Inference Attack Accuracy: 0.5807
+-----------------------------------
+k=0.75
+Running on device: CUDA
+Files already downloaded and verified
+Files already downloaded and verified
+Running RMU method
+  0%|          | 0/5 [00:00<?, ?it/s] 20%|██        | 1/5 [00:02<00:08,  2.00s/it] 40%|████      | 2/5 [00:03<00:05,  1.79s/it] 60%|██████    | 3/5 [00:05<00:03,  1.73s/it] 80%|████████  | 4/5 [00:06<00:01,  1.66s/it]100%|██████████| 5/5 [00:08<00:00,  1.69s/it]100%|██████████| 5/5 [00:08<00:00,  1.72s/it]
+--- RMU Training Complete ---
+Results after unlearning: through the method rmu
+Test Accuracy: 0.8774
+Truth Ratio: 0.9789
+Membership Inference Attack Accuracy: 0.5719
+-----------------------------------
+k=1
+Running on device: CUDA
+Files already downloaded and verified
+Files already downloaded and verified
+Running RMU method
+  0%|          | 0/5 [00:00<?, ?it/s] 20%|██        | 1/5 [00:02<00:11,  2.78s/it] 40%|████      | 2/5 [00:05<00:07,  2.50s/it] 60%|██████    | 3/5 [00:07<00:04,  2.32s/it] 80%|████████  | 4/5 [00:09<00:02,  2.49s/it]100%|██████████| 5/5 [00:12<00:00,  2.52s/it]100%|██████████| 5/5 [00:12<00:00,  2.50s/it]
+--- RMU Training Complete ---
+Results after unlearning: through the method rmu
+Test Accuracy: 0.7368
+Truth Ratio: 0.7817
+Membership Inference Attack Accuracy: 0.5243
+-----------------------------------
+Original unlearning method
+Running on device: CUDA
+Files already downloaded and verified
+Files already downloaded and verified
+Running Original method
+Results after unlearning: through the method original
+Test Accuracy: 0.8360
+Truth Ratio: 0.8396
+Membership Inference Attack Accuracy: 0.5093
+-----------------------------------
+Retrain method
+Running on device: CUDA
+Files already downloaded and verified
+Files already downloaded and verified
+Running eval on Retrain method
+Results after unlearning: through the method retrain
+Test Accuracy: 0.8796
+Truth Ratio: 0.8741
+Membership Inference Attack Accuracy: 0.5028
+-----------------------------------

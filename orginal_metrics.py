@@ -1,4 +1,4 @@
-import argparser
+import argparse
 import os
 import requests
 import numpy as np
@@ -74,3 +74,17 @@ def simple_mia(sample_loss, members, n_splits=10, random_state=0):
         attack_model, sample_loss, members, cv=cv, scoring="accuracy"
     )
 
+
+def run_simple_mia(model, forget_loader, test_loader):
+    test_losses = compute_losses(model, test_loader)
+    forget_losses = compute_losses(model, forget_loader)
+
+    # Since we have more forget losses than test losses, sub-sample them, to have a class-balanced dataset.
+    np.random.shuffle(forget_losses)
+    forget_losses = forget_losses[: len(test_losses)]
+
+    samples_mia = np.concatenate((test_losses, forget_losses)).reshape((-1, 1))
+    labels_mia = [0] * len(test_losses) + [1] * len(forget_losses)
+
+    mia_scores = simple_mia(samples_mia, labels_mia)
+    return mia_scores

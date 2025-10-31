@@ -5,88 +5,76 @@ import torch.optim as optim
 import random
 import copy
 import numpy as np
-
-
-def set_seed(seed):
-    random.seed(SEED)
-    np.random.seed(SEED)
-    torch.manual_seed(SEED)
-
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed(SEED)
-        torch.cuda.manual_seed_all(SEED)
-    
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
-
-# def get_model_layers(model):
-#     """
-#     Recursively flattens a model into a list of (name, layer) tuples,
-#     filtering for specific types of layers that are suitable for
-#     sampling activations.
-    
-#     This works for any model architecture, not just ResNet.
-#     """
-    
-#     # --- Customize this list ---
-#     # Define the types of layers you want to be able to sample from.
-#     # These are typically the layers that produce the main representations.
-#     SAMPLABLE_LAYER_TYPES = (
-#         nn.Conv2d,
-#         nn.Linear
-#     )
-    
-#     samplable_layers = []
-    
-#     # model.named_modules() recursively finds EVERY module in the network
-#     # (e.g., 'layer1.0.conv1', 'layer1.0.bn1', etc.)
-#     for name, module in model.named_modules():
-#         # We check if the module is an instance of any of the types
-#         # we defined in our tuple above.
-#         if isinstance(module, SAMPLABLE_LAYER_TYPES):
-#             samplable_layers.append((name, module))
-            
-#     return samplable_layers
+from tqdm import tqdm
 
 def get_model_layers(model):
     """
-    Flattens a sequential or ResNet-like model into a
-    list of (name, layer) tuples.
-    """
-    layers = []
-    # Example for a simple Sequential model
-    if isinstance(model, nn.Sequential):
-        for i, layer in enumerate(model.children()):
-            layers.append((f"layer_{i}", layer))
-    # Example for ResNet
-    elif hasattr(model, 'conv1'):
-        layers.append(("conv1", model.conv1))
-        layers.append(("bn1", model.bn1))
-        layers.append(("relu", model.relu))
-        layers.append(("maxpool", model.maxpool))
-        
-        if hasattr(model, 'layer1'):
-            layers.append(("layer1", model.layer1))
-        if hasattr(model, 'layer2'):
-            layers.append(("layer2", model.layer2))
-        if hasattr(model, 'layer3'):
-            layers.append(("layer3", model.layer3))
-        if hasattr(model, 'layer4'):
-            layers.append(("layer4", model.layer4))
-            
-        layers.append(("avgpool", model.avgpool))
-        layers.append(("fc", model.fc))
-    else:
-        # Fallback for other models
-        for name, layer in model.named_children():
-            layers.append((name, layer))
-            
-    # We only want to sample from layers that produce activations
-    # (e.g., Conv, Linear, or blocks) not non-linearities or pooling.
-    # For this example, let's keep it simple and use all named children.
-    # In a real case, you would filter this list.
+    Recursively flattens a model into a list of (name, layer) tuples,
+    filtering for specific types of layers that are suitable for
+    sampling activations.
     
-    return [(name, layer) for name, layer in model.named_children() if 'conv' in name or 'layer' in name or 'fc' in name]
+    This works for any model architecture, not just ResNet.
+    """
+    
+    # --- Customize this list ---
+    # Define the types of layers you want to be able to sample from.
+    # These are typically the layers that produce the main representations.
+    SAMPLABLE_LAYER_TYPES = (
+        nn.Conv2d,
+        nn.Linear
+    )
+    
+    samplable_layers = []
+    
+    # model.named_modules() recursively finds EVERY module in the network
+    # (e.g., 'layer1.0.conv1', 'layer1.0.bn1', etc.)
+    for name, module in model.named_modules():
+        # We check if the module is an instance of any of the types
+        # we defined in our tuple above.
+        if isinstance(module, SAMPLABLE_LAYER_TYPES):
+            samplable_layers.append((name, module))
+            
+    return samplable_layers
+
+# def get_model_layers(model):
+#     """
+#     Flattens a sequential or ResNet-like model into a
+#     list of (name, layer) tuples.
+#     """
+#     layers = []
+#     # Example for a simple Sequential model
+#     if isinstance(model, nn.Sequential):
+#         for i, layer in enumerate(model.children()):
+#             layers.append((f"layer_{i}", layer))
+#     # Example for ResNet
+#     elif hasattr(model, 'conv1'):
+#         layers.append(("conv1", model.conv1))
+#         layers.append(("bn1", model.bn1))
+#         layers.append(("relu", model.relu))
+#         layers.append(("maxpool", model.maxpool))
+        
+#         if hasattr(model, 'layer1'):
+#             layers.append(("layer1", model.layer1))
+#         if hasattr(model, 'layer2'):
+#             layers.append(("layer2", model.layer2))
+#         if hasattr(model, 'layer3'):
+#             layers.append(("layer3", model.layer3))
+#         if hasattr(model, 'layer4'):
+#             layers.append(("layer4", model.layer4))
+            
+#         layers.append(("avgpool", model.avgpool))
+#         layers.append(("fc", model.fc))
+#     else:
+#         # Fallback for other models
+#         for name, layer in model.named_children():
+#             layers.append((name, layer))
+            
+#     # We only want to sample from layers that produce activations
+#     # (e.g., Conv, Linear, or blocks) not non-linearities or pooling.
+#     # For this example, let's keep it simple and use all named children.
+#     # In a real case, you would filter this list.
+    
+#     return [(name, layer) for name, layer in model.named_children() if 'conv' in name or 'layer' in name or 'fc' in name]
 
 
 def get_layer_range_indices(k, num_layers):
@@ -156,7 +144,7 @@ def create_random_vectors(model_layers, device='cpu'):
             
     return u_vectors
 
-def train_rmu(model, forget_loader, retain_loader, k, epochs=1, lr=1e-5, c=6.5, alpha=1200, device='cpu', seed=42):
+def train_rmu(model, forget_loader, retain_loader, k, epochs=1, lr=1e-3, c=6.5, alpha=1200, device='cpu', seed=42):
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -200,7 +188,7 @@ def train_rmu(model, forget_loader, retain_loader, k, epochs=1, lr=1e-5, c=6.5, 
         return hook
 
     # --- Training Loop ---
-    for epoch in range(epochs):
+    for epoch in tqdm(range(epochs)):
         
         # --- 5. Sample ONE layer for the ENTIRE epoch ---
         start_idx, end_idx = get_layer_range_indices(k, num_layers)
@@ -216,7 +204,7 @@ def train_rmu(model, forget_loader, retain_loader, k, epochs=1, lr=1e-5, c=6.5, 
             print(f"Warning: Layer {sampled_layer_name} has no 'u' vector. Skipping epoch {epoch+1}.")
             continue
 
-        print(f"--- Starting Epoch {epoch+1}/{epochs}, Training on Layer: {sampled_layer_name} ---")
+        # print(f"--- Starting Epoch {epoch+1}/{epochs}, Training on Layer: {sampled_layer_name} ---")
 
         # 6. Get the 'u' vector for the sampled layer
         u = u_vectors[sampled_layer_name].to(device)
@@ -277,7 +265,7 @@ def train_rmu(model, forget_loader, retain_loader, k, epochs=1, lr=1e-5, c=6.5, 
         if hook_handle_updated: hook_handle_updated.remove()
         if hook_handle_frozen: hook_handle_frozen.remove()
         
-        print(f"--- Finished Epoch {epoch+1}/{epochs} ---")
+        # print(f"--- Finished Epoch {epoch+1}/{epochs} ---")
 
 
     print("--- RMU Training Complete ---")

@@ -21,3 +21,9 @@ print("Running on device:", DEVICE.upper())
 from truth_ratio import truth_ratio
 from rmu import rmu
 from orginal_metrics import accuracy, simple_mia
+
+
+
+
+if __name__ == "__main__":
+    parser = 

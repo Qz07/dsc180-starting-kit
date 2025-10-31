@@ -13,7 +13,7 @@ import torchvision
 from torchvision import transforms
 from torchvision.utils import make_grid
 from torchvision.models import resnet18
-
+RNG = torch.Generator().manual_seed(42)
 def load_data():
     # download and pre-process CIFAR10
     normalize = transforms.Compose(
@@ -70,4 +70,4 @@ def load_data():
     retain_loader = torch.utils.data.DataLoader(
         retain_set, batch_size=128, shuffle=True, num_workers=2, generator=RNG
     )
-    return forget_loader, retain_loader
+    return forget_loader, retain_loader, val_loader, test_loader
