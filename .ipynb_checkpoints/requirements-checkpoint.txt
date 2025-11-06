@@ -1,9 +1,0 @@
-# Core libraries
-numpy
-matplotlib
-requests
-scikit-learn
-
-# PyTorch and related libraries
-torch
-torchvision
