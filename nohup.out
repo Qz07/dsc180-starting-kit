@@ -1,0 +1,3 @@
+Running on device: CUDA
+usage: run_exp.py [-h] --method METHOD [--num_epochs NUM_EPOCHS] [--k K]
+run_exp.py: error: unrecognized arguments: --sweep --k_schedule 0.75,1.0,1.0,1.0 --lr 3e-4,1e-4 --alpha 300,1000 --c 2.0,4.0 --auto_scale_c false,true --c_scale 2.0,3.0 --grad_clip 0.5,1.0 --seed 42,1337 --save_csv results/rmu_sweep.csv --save_jsonl results/rmu_sweep.jsonl --save_ckpt checkpoints/rmu_{stamp}.pth
