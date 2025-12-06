@@ -1,14 +1,14 @@
 <img src="https://github.com/unlearning-challenge/starting-kit/assets/277639/d1fa7889-5d91-4e6d-8082-7d59ef728f9c" style="width: 100px">
 
-# DSC 180A Capstone – Machine Unlearning on CIFAR-10
+# DSC 180A Quarter 1 Project: Machine Unlearning on CIFAR-10
 ## Fork of the NeurIPS 2023 Machine Unlearning Challenge Starting Kit
 
-This repository is a **fork** of the official starting kit for the **NeurIPS 2023 Machine Unlearning Challenge**, adapted for my DSC 180A Quarter 1 capstone project at UC San Diego.
+This repository is a **fork** of the official starting kit for the **NeurIPS 2023 Machine Unlearning Challenge**, adapted for my DSC 180A Capstone project at UC San Diego.
 
 The project focuses on removing specific data subsets (forget sets) from a pre-trained **ResNet-18** model trained on **CIFAR-10**, while preserving utility on the remaining data.
 
-### Key Contributions
-In addition to the standard challenge baselines (Fine-tuning, Gradient Ascent), this repository implements **UNDIAL** (Unlearning via Decision-level Importance and Adaptive Loss). This method utilizes:
+### Key Contribution: UNDIAL
+In addition to the standard challenge baselines (Fine-tuning, Gradient Ascent), this repository implements **UNDIAL** (Unlearning via Decision-level Importance and Adaptive Loss). This custom method utilizes:
 * **Truth Ratio**: To measure decision confidence shifts.
 * **KL Divergence**: To constrain the model from deviating too far from the original distribution on retained data.
 * **Margin Metrics**: To ensure robust decision boundaries.
