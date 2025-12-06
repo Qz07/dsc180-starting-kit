@@ -3,25 +3,22 @@
 # DSC 180A Quarter 1 Project: Machine Unlearning on CIFAR-10
 ## Fork of the NeurIPS 2023 Machine Unlearning Challenge Starting Kit
 
-This repository is a **fork** of the official starting kit for the **NeurIPS 2023 Machine Unlearning Challenge**, adapted for my DSC 180A Capstone project at UC San Diego.
+This repository is a **fork** of the official starting kit for the **NeurIPS 2023 Machine Unlearning Challenge**, adapted for our DSC 180A Capstone project at UC San Diego.
 
 The project focuses on removing specific data subsets (forget sets) from a pre-trained **ResNet-18** model trained on **CIFAR-10**, while preserving utility on the remaining data.
 
 ### Methods Implemented
-This project implements and compares three distinct machine unlearning approaches:
+This project explores and compares three distinct machine unlearning approaches developed by the group:
 
-1.  **Fine-tuning (Baseline)**: Standard approach of fine-tuning the model on the retained data to gradually shift weights away from the forget set.
-2.  **Gradient Ascent (Baseline)**: A method that intentionally maximizes the loss on the forget set to degrade the model's performance on those specific samples.
-3.  **UNDIAL (Proposed Method)**: Unlearning via Decision-level Importance and Adaptive Loss. This custom approach utilizes:
-    * **Truth Ratio**: To measure decision confidence shifts.
-    * **KL Divergence**: To constrain the model from deviating too far from the original distribution on retained data.
-    * **Margin Metrics**: To ensure robust decision boundaries.
+1.  **SimNPO**: An optimization-based method that treats the forget set as negative preferences. It penalizes the model for retaining high likelihoods on forgotten samples relative to a reference model.
+2.  **RMU**: *Representation Matching Update*. A method that modifies the model's internal representations of the forget set to match a random vector, effectively erasing the learned features while keeping the retain set representations stable.
+3.  **UNDIAL**: *Unlearning via Decision-level Importance and Adaptive Loss*. An approach utilizing Truth Ratio to measure decision confidence shifts, KL Divergence for stability, and margin metrics to ensure robust decision boundaries.
 
 ---
 
 ## 1. Repository Structure
 
-The code is organized to separate the standard challenge kit from my custom experiments.
+The code is organized to separate the standard challenge kit from the specific method experiments.
 
 ```text
 .
@@ -32,8 +29,8 @@ The code is organized to separate the standard challenge kit from my custom expe
 │
 ├─ notebooks/
 │   ├─ Unlearning-CIFAR10.ipynb         # Original challenge starter (Data setup & basic visualizations)
-│   ├─ methods_metrics_results.ipynb    # Implementation and aggregation of Baseline methods
-│   └─ undial_experiments_results.ipynb # Implementation of UNDIAL method + custom metrics
+│   ├─ methods_metrics_results.ipynb    # Implementation and evaluation of SimNPO and RMU methods
+│   └─ undial_experiments_results.ipynb # Implementation and evaluation of UNDIAL method
 │
 └─ data/                        # Directory created automatically to store CIFAR-10
 ```
