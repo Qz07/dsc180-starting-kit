@@ -32,3 +32,60 @@ The code is organized to separate the standard challenge kit from my custom expe
 │   └─ undial_experiments_results.ipynb # Implementation of UNDIAL method + custom metrics
 │
 └─ data/                        # Directory created automatically to store CIFAR-10
+```
+
+---
+
+## 2. Accessing and Storing Data
+
+This project utilizes the **CIFAR-10** dataset. Data access is handled automatically via the provided scripts.
+
+* **Dataset**: The code uses `torchvision.datasets.CIFAR10`. You do **not** need to download the dataset manually. When you run the notebooks for the first time, the script will check for the `data/` directory and download the necessary files if they are missing.
+* **Forget Set**: The specific indices targeted for unlearning are provided in `forget_idx.npy` (included in the repo).
+* **Model Weights**: The pre-trained ResNet-18 weights (`weights_resnet18_cifar10.pth`) are included in the repository root.
+
+---
+
+## 3. Software Dependencies
+
+The code is implemented in Python. To reproduce the results, you must install the necessary dependencies.
+
+### Installation
+It is recommended to use a virtual environment.
+
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/Qz07/dsc180-starting-kit.git](https://github.com/Qz07/dsc180-starting-kit.git)
+    cd dsc180-starting-kit
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+**Key libraries used:** `torch`, `torchvision`, `numpy`, `pandas`, `scikit-learn`, `matplotlib`, and `jupyter`.
+
+---
+
+## 4. Reproducing Results
+
+The primary way to reproduce the results is through the provided Jupyter Notebooks.
+
+### Launching the Environment
+To start the notebook server, run:
+
+```bash
+jupyter notebook
+```
+
+### Experiment Workflow
+Run the notebooks in the following order to replicate the full analysis:
+
+1.  **Baseline Generation (`notebooks/methods_metrics_results.ipynb`)**:
+    * **Goal**: Establish performance benchmarks.
+    * **Action**: Run all cells to execute standard unlearning baselines (random labeling, gradient ascent) and generate accuracy/MIA (Membership Inference Attack) scores.
+
+2.  **UNDIAL Method Evaluation (`notebooks/undial_experiments_results.ipynb`)**:
+    * **Goal**: Evaluate the custom unlearning strategy.
+    * **Action**: Run all cells to execute the **UNDIAL** algorithm. This notebook performs the decision-level analysis, calculates the Truth Ratio/KL metrics, and compares efficacy against the baselines generated in step 1.
