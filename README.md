@@ -7,11 +7,15 @@ This repository is a **fork** of the official starting kit for the **NeurIPS 202
 
 The project focuses on removing specific data subsets (forget sets) from a pre-trained **ResNet-18** model trained on **CIFAR-10**, while preserving utility on the remaining data.
 
-### Key Contribution: UNDIAL
-In addition to the standard challenge baselines (Fine-tuning, Gradient Ascent), this repository implements **UNDIAL** (Unlearning via Decision-level Importance and Adaptive Loss). This custom method utilizes:
-* **Truth Ratio**: To measure decision confidence shifts.
-* **KL Divergence**: To constrain the model from deviating too far from the original distribution on retained data.
-* **Margin Metrics**: To ensure robust decision boundaries.
+### Methods Implemented
+This project implements and compares three distinct machine unlearning approaches:
+
+1.  **Fine-tuning (Baseline)**: Standard approach of fine-tuning the model on the retained data to gradually shift weights away from the forget set.
+2.  **Gradient Ascent (Baseline)**: A method that intentionally maximizes the loss on the forget set to degrade the model's performance on those specific samples.
+3.  **UNDIAL (Proposed Method)**: Unlearning via Decision-level Importance and Adaptive Loss. This custom approach utilizes:
+    * **Truth Ratio**: To measure decision confidence shifts.
+    * **KL Divergence**: To constrain the model from deviating too far from the original distribution on retained data.
+    * **Margin Metrics**: To ensure robust decision boundaries.
 
 ---
 
@@ -82,10 +86,10 @@ jupyter notebook
 ### Experiment Workflow
 Run the notebooks in the following order to replicate the full analysis:
 
-1.  **Baseline Generation (`notebooks/methods_metrics_results.ipynb`)**:
-    * **Goal**: Establish performance benchmarks.
-    * **Action**: Run all cells to execute standard unlearning baselines (random labeling, gradient ascent) and generate accuracy/MIA (Membership Inference Attack) scores.
+1.  **SimNPO & RMU Experiments (`notebooks/methods_metrics_results.ipynb`)**:
+    * **Action**: Run all cells in this notebook.
+    * **Output**: This will train the models using the SimNPO and RMU algorithms and generate their respective accuracy and MIA (Membership Inference Attack) scores.
 
 2.  **UNDIAL Method Evaluation (`notebooks/undial_experiments_results.ipynb`)**:
-    * **Goal**: Evaluate the custom unlearning strategy.
-    * **Action**: Run all cells to execute the **UNDIAL** algorithm. This notebook performs the decision-level analysis, calculates the Truth Ratio/KL metrics, and compares efficacy against the baselines generated in step 1.
+    * **Action**: Run all cells in this notebook.
+    * **Output**: This will execute the UNDIAL algorithm, perform decision-level analysis, and calculate metrics such as Truth Ratio and KL Divergence.
